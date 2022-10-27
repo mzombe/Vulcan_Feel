@@ -8,7 +8,7 @@ public class SpawnPlatform : MonoBehaviour
     public List<Transform> currentPlatforms = new List<Transform>();
     public int offset;
 
-    private RandomSpawn spawnWalls;
+    private RandomSpawn spawnRandom;
     private Transform player;
     private Transform currentPlatformsPoint;
     private int platformIndex;
@@ -16,7 +16,7 @@ public class SpawnPlatform : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        spawnWalls = GetComponent<RandomSpawn>();
+        spawnRandom = GetComponent<RandomSpawn>();
         for (int i = 0; i < platforms.Count; i++)
         {
             Transform p = Instantiate(platforms[i], new Vector3(0f,-1f,i * 100f),transform.rotation).transform;
@@ -50,7 +50,12 @@ public class SpawnPlatform : MonoBehaviour
 
         for (int i = 0; i < RandomSpecific(); i++)
         {
-            spawnWalls.GenerateWall(100f, 200f);
+            spawnRandom.GenerateWall(100f, 200f);
+        }
+
+        for (int i = 0; i < (RandomSpecific()-2); i++)
+        {
+            spawnRandom.GenerateSaw(200f, 300f);
         }
     }
 

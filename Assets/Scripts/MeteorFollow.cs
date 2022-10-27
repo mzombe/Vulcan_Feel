@@ -37,9 +37,6 @@ public class MeteorFollow : MonoBehaviour
 
         private void FixedUpdate() {
 
-            //FindObjectOfType<AudioManager>().PlaySound("Meteor");
-            //FindObjectOfType<AudioManager>().VolumeAdd("Meteor");
-
             if(Player != null) {
                 float distance = transform.position.z - Player.transform.position.z;
 
@@ -90,7 +87,14 @@ public class MeteorFollow : MonoBehaviour
 
         private void OnCollisionEnter(Collision collision) {
 
-            if (collision.gameObject.tag == "Wall" ||collision.gameObject.tag == "Ground" ) {
+            if (collision.gameObject.tag == "Ground" ) {
+                Destroy(this.gameObject);
+            }
+
+            if (collision.gameObject.tag == "Wall") {
+                FindObjectOfType<AudioManager>().PlaySound("HitWall");
+                GameObject wall = collision.gameObject;
+                wall.GetComponent<MeshDestroy>().DestroyMesh();
                 Destroy(this.gameObject);
             }
 

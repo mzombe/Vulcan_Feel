@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Vector3 move;
     public float forwardSpeed;
-    public float maxSpeed;
 
     private int desiredLane = 1;
     public float laneDistance = 2.5f;
@@ -35,6 +34,9 @@ public class PlayerController : MonoBehaviour
     [Header("Particles")] 
     public GameObject slamParticle;
     public ParticleSystem hitParticle;
+    public ParticleSystem dashLeft;
+    public ParticleSystem dashRight;
+
     void Start()
     {   
         controller = GetComponent<CharacterController>();
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour
             prevState = true;
             if(isGrounded == true && prevState == true){
                 anime.SetBool("FreFall", false);
+                anime.SetBool("Jump", false);
                 FindObjectOfType<AudioManager>().PlaySound("Land");
                 GameObject particle = Instantiate(slamParticle, new Vector3(transform.position.x,-1f,transform.position.z), slamParticle.transform.rotation);
                 Destroy(particle, 1f);
@@ -60,7 +63,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.17f, groundLayer);
 
         if (isGrounded && velocity.y < 0)
-            velocity.y = -1f;
+            velocity.y = 0f;
 
         if (isGrounded)
         {
@@ -73,7 +76,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             anime.SetBool("Grounded", false);
-            anime.SetBool("Jump", false);
             anime.SetBool("FreFall", true);
             velocity.y += gravity * Time.deltaTime;  
         }
@@ -82,12 +84,16 @@ public class PlayerController : MonoBehaviour
 
         if (SwipeManager.swipeRight)
         {
+            FindObjectOfType<AudioManager>().PlaySound("Dash");
+            dashLeft.Play();
             desiredLane++;
             if (desiredLane == 3)
                 desiredLane = 2;
         }
         if (SwipeManager.swipeLeft)
         {
+            FindObjectOfType<AudioManager>().PlaySound("Dash");
+            dashRight.Play();
             desiredLane--;
             if (desiredLane == -1)
                 desiredLane = 0;
@@ -123,11 +129,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.tag == "Wall" )
+        if (hit.gameObject.tag == "Wall" || hit.gameObject.tag == "Saw")
         {
             Damage();
-            GameObject wall = hit.gameObject;
-            Destroy(wall);
+            GameObject obj = hit.gameObject;
+            Destroy(obj);
         }
 
         

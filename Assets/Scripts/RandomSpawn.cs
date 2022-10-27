@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RandomSpawn : MonoBehaviour
 {
-    public GameObject preFabWall;
+    public GameObject preFabWall, preFabSaw;
 
     private GameObject Player;
 
@@ -16,11 +16,20 @@ public class RandomSpawn : MonoBehaviour
         {
             GenerateWall(20f,100f);
         }
+        for (int i = 0; i < (RandomSpecificInt() - 2); i++)
+        {
+            GenerateSaw(100f,300f);
+        }
     }
 
     public void GenerateWall(float min, float max){
         Vector3 RandomSpawnPosition = new Vector3(RandomSpecific(),0f,Random.Range(Player.transform.position.z + min, Player.transform.position.z + max));
         Instantiate(preFabWall, RandomSpawnPosition, preFabWall.transform.rotation);
+    }
+
+    public void GenerateSaw(float min, float max){
+        Vector3 RandomSpawnPosition = new Vector3(RandomSpecific(),-1f,Random.Range(Player.transform.position.z + min, Player.transform.position.z + max));
+        Instantiate(preFabSaw, RandomSpawnPosition, preFabSaw.transform.rotation);
     }
 
     public float RandomSpecific(){    
@@ -45,7 +54,7 @@ public class RandomSpawn : MonoBehaviour
 
     public int RandomSpecificInt(){    
      
-     float val = Random.Range(1,4);
+     float val = Random.Range(1,6);
      
      if(val == 1)
          {
@@ -59,6 +68,14 @@ public class RandomSpawn : MonoBehaviour
          {
              return 4;
          }
+    else if(val == 4)
+        {
+            return 5;
+        }   
+    else if(val > 5)
+        {
+            return 6;
+        }   
     return 1;
     
     }

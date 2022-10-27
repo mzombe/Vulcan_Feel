@@ -7,6 +7,7 @@ TagManager:
   - Meteor
   - Wall
   - Ground
+  - Saw
   layers:
   - Default
   - TransparentFX
@@ -19,8 +20,8 @@ TagManager:
   - Player
   - Wall
   - Ball
-  - 
-  - 
+  - Saw
+  - Meteor
   - 
   - 
   - 
