@@ -1,0 +1,106 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
+
+public class PlayerManager : MonoBehaviour
+{
+    public GameObject screenPause, screenGameOver;
+    public Text score;
+
+    public static PlayerManager instance;
+
+    public float scoreFloat;
+    public GameObject addScore;
+    public int life;
+    public Image[] imgLife;
+
+    public void Awake()
+    {
+        instance = this;
+        ResumeGame();
+    }
+
+    public void ScoreAddPlus(float add){
+        scoreFloat += add;
+        addScore.GetComponent<Text>().text = "+" + add.ToString();
+        addScore.GetComponent<Animator>().SetBool("Active", true);
+    }
+
+    void Update()
+    {   
+        switch (life){
+            case 3:
+                imgLife[3].enabled = false;
+            break;
+
+            case 2:
+                imgLife[2].enabled = false;
+            break;
+                
+            case 1:
+                imgLife[1].enabled = false;
+            break;
+
+            case 0:
+                imgLife[0].enabled = false;
+            break;
+        }
+
+         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale > 0 ){
+            PauseGame();
+        }
+
+        if(Time.timeScale > 0 && scoreFloat < 9999f){
+            scoreFloat += 0.1f;
+            score.text = scoreFloat.ToString("N0");
+        }
+
+        if(life <=0 ){
+            GameOver();
+        }
+    }
+
+    public void GameOver(){
+        if(screenGameOver != null) screenGameOver.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void PauseGame(){
+        if(screenPause != null) screenPause.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame(){
+        Time.timeScale = 1;
+        if(screenPause != null) screenPause.SetActive(false);
+    }
+
+    public void RestartGame(){
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame(){
+        Application.Quit();
+    }
+
+    public void LoadScene(string name){
+        Time.timeScale = 1;
+        SceneManager.LoadScene(name);
+    }
+
+    public void ShowItens(GameObject obj){
+        obj.SetActive(true);
+    }
+
+    public void HideItens(GameObject obj){
+        obj.SetActive(false);
+    }
+
+    public void OpenURL(string url){
+        Application.OpenURL(url);
+    }
+}

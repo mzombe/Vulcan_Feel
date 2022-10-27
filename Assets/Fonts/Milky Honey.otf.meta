@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: dae3a6bb80796dc429276708db1921ae
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Milky Honey
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a03fb13511c6c234db6920c856844e8a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

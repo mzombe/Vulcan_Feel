@@ -14,10 +14,12 @@ public class MeshDestroy : MonoBehaviour
     public float ExplodeForce = 0;
 
     private GameObject Player;
-    
+    private Renderer render;
+
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        render = gameObject.GetComponent<Renderer>();
     }
 
     private IEnumerator Destroy()
@@ -46,6 +48,8 @@ public class MeshDestroy : MonoBehaviour
     public void DestroyMesh()
     {
         StartCoroutine(Destroy());
+
+        render.material.color = Color.red;
 
         var originalMesh = GetComponent<MeshFilter>().mesh;
         originalMesh.RecalculateBounds();
@@ -318,5 +322,6 @@ public class MeshDestroy : MonoBehaviour
 
         }
     }
+
 
 }

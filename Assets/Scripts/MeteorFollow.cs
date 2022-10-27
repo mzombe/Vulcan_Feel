@@ -25,13 +25,25 @@ public class MeteorFollow : MonoBehaviour
 
         private CharacterController _targetController;
 
+        private GameObject Player;
+
         private void Start() {
+            Player = GameObject.FindGameObjectWithTag("Player");
             _target = GameObject.FindGameObjectWithTag("Player");
             _targetController = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
-            StartCoroutine(Destroy());
+            StartCoroutine(Destroy(15f));
         }
 
         private void FixedUpdate() {
+
+            if(Player != null) {
+                float distance = transform.position.z - Player.transform.position.z;
+
+                if(distance < -5f){
+                    Destroy(this.gameObject);
+                }
+            }
+
             _rb.velocity = transform.forward * _speed;
 
             var leadTimePercentage = Mathf.InverseLerp(_minDistancePredict, _maxDistancePredict, Vector3.Distance(transform.position, _target.transform.position));
@@ -72,19 +84,20 @@ public class MeteorFollow : MonoBehaviour
         }
 
         private void OnCollisionEnter(Collision collision) {
-            
-            if (collision.gameObject.tag == "Player") {
+
+            if (collision.gameObject.tag == "Wall" ||collision.gameObject.tag == "Ground" ) {
                 Destroy(this.gameObject);
             }
-            if (collision.gameObject.tag == "Wall") {
-                Destroy(this.gameObject);
+
+            if (collision.gameObject.tag == "Player"){
+                StartCoroutine(Destroy(1f));
             }
         
         }
 
-    private IEnumerator Destroy()
+    private IEnumerator Destroy(float i)
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(i);
         Destroy(this.gameObject);
     }
 

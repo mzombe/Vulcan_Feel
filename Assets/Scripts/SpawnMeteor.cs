@@ -29,7 +29,7 @@ public class SpawnMeteor : MonoBehaviour
     }
 
     IEnumerator WaitSpawn(){
-        yield return new WaitForSeconds(Random.Range(1f, 6f));
+        yield return new WaitForSeconds(Random.Range(2f, 6f));
         if(instanciate == null)instanciate = Instantiate(preFab, transform.position, transform.rotation);
     }
 

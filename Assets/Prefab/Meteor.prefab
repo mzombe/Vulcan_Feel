@@ -116,7 +116,7 @@ MonoBehaviour:
   _speed: 15
   _rotateSpeed: 95
   _maxDistancePredict: 100
-  _minDistancePredict: 5
+  _minDistancePredict: 0
   _maxTimePrediction: 5
   _deviationAmount: 0
   _deviationSpeed: 0

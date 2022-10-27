@@ -25,6 +25,7 @@ public class SpawnPlatform : MonoBehaviour
         }    
 
         currentPlatformsPoint = currentPlatforms[platformIndex].GetComponent<Platform>().point;
+        
     }
 
     void Update()
@@ -55,7 +56,7 @@ public class SpawnPlatform : MonoBehaviour
 
     public int RandomSpecific(){    
      
-     float val = Random.Range(1,3);
+     float val = Random.Range(1,4);
      
      if(val == 1)
          {
@@ -66,6 +67,10 @@ public class SpawnPlatform : MonoBehaviour
              return 3;
          }
      else if(val == 3)
+         {
+             return 4;
+         }
+    else if(val > 3)
          {
              return 4;
          }

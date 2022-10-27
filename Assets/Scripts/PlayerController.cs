@@ -23,20 +23,20 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight = 2;
     private Vector3 velocity;
 
-    //public Animator animator;
-    private bool isSliding = false, triggerMeteor = false;
-
-    public float slideDuration = 1.5f;
+    public Renderer modelPlayer;
 
     bool toggle = false;
 
     private GameObject ball;
     private Camera mainCamera;
+    private bool isDamaged = false, prevState = false; 
 
+    [Header("Particles")] 
+    public GameObject slamParticle;
+    public ParticleSystem hitParticle;
     void Start()
-    {
+    {   
         controller = GetComponent<CharacterController>();
-        Time.timeScale = 1.2f;
         mainCamera = Camera.main;
     }
 
@@ -44,28 +44,32 @@ public class PlayerController : MonoBehaviour
     {
 
         //Increase Speed
-        if (toggle)
-        {
-            toggle = false;
-            if (forwardSpeed < maxSpeed)
-                forwardSpeed += 0.1f * Time.fixedDeltaTime;
-        }
-        else
-        {
-            toggle = true;
-            if (Time.timeScale < 2f)
-                Time.timeScale += 0.005f * Time.fixedDeltaTime;
-        }
+        // if (toggle)
+        // {
+        //     toggle = false;
+        //     if (forwardSpeed < maxSpeed)
+        //         forwardSpeed += 0.1f * Time.fixedDeltaTime;
+        // }
+        // else
+        // {
+        //     toggle = true;
+        //     if (Time.timeScale < 2f)
+        //         Time.timeScale += 0.005f * Time.fixedDeltaTime;
+        // }
     }
 
     void Update()
-    {
-        if(SwipeManager.tap && triggerMeteor && !SwipeManager.swipeLeft && !SwipeManager.swipeRight && !SwipeManager.swipeDown && !SwipeManager.swipeUp){
-            HitBall();
-            mainCamera.GetComponent<ScreenShake>().additionalStrength = 4f;
-            mainCamera.GetComponent<ScreenShake>().start = true;
+    {       
+
+        if(prevState == isGrounded){
+            prevState = true;
+            if(isGrounded == true && prevState == true){
+                GameObject particle = Instantiate(slamParticle, new Vector3(transform.position.x,-1f,transform.position.z), slamParticle.transform.rotation);
+                Destroy(particle, 1f);
+                prevState = false;
+            }
         }
-        
+
 
         //animator.SetBool("isGameStarted", true);
         move.z = forwardSpeed;
@@ -77,22 +81,16 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded)
         {
-            if (SwipeManager.swipeUp)
-                Jump();
 
-            if (SwipeManager.swipeDown && !isSliding)
-                StartCoroutine(Slide());
+            if (SwipeManager.swipeUp){
+                Jump();
+            }
         }
         else
         {
-            velocity.y += gravity * Time.deltaTime;
-            if (SwipeManager.swipeDown && !isSliding)
-            {
-                StartCoroutine(Slide());
-                velocity.y = -10;
-            }                
-
+            velocity.y += gravity * Time.deltaTime;  
         }
+
         controller.Move(velocity * Time.deltaTime);
 
         //Gather the inputs on which lane we should be
@@ -132,61 +130,82 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {   
-        StopCoroutine(Slide());
-        //animator.SetBool("isSliding", false);
         //animator.SetTrigger("jump");
         controller.center = Vector3.zero;
         controller.height = 2;
-        isSliding = false;
    
         velocity.y = Mathf.Sqrt(jumpHeight * 2 * -gravity);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // if(hit.transform.tag == "Obstacle")
-        // {
         //     FindObjectOfType<AudioManager>().PlaySound("GameOver");
-        // }
+
+        if (hit.gameObject.tag == "Wall" )
+        {
+            Damage();
+            GameObject wall = hit.gameObject;
+            Destroy(wall);
+        }
+
+        
     }
 
-    private IEnumerator Slide()
-    {
-        isSliding = true;
-        //animator.SetBool("isSliding", true);
-        yield return new WaitForSeconds(0.25f/ Time.timeScale);
-        controller.center = new Vector3(0, -0.5f, 0);
-        controller.height = 1;
-
-        yield return new WaitForSeconds((slideDuration - 0.25f)/Time.timeScale);
-
-        //animator.SetBool("isSliding", false);
-
-        controller.center = Vector3.zero;
-        controller.height = 2;
-
-        isSliding = false;
-    }
-
-    public void OnTriggerEnter(Collider collision)
+    public void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Meteor" )
         {
-            triggerMeteor = true;
-            StartCoroutine(TriggerFalse());
+            Destroy(collision.gameObject);
+            Damage();
         }
     }
 
-    private IEnumerator TriggerFalse()
+    public void OnTriggerStay(Collider collision)
     {
-        yield return new WaitForSeconds(0.2f);
-        triggerMeteor = false;
+        if(collision.gameObject.tag == "Meteor")
+        {   
+            if(SwipeManager.tap && !isDamaged ){
+                Destroy(collision.gameObject);
+                HitBall();
+                mainCamera.GetComponent<ScreenShake>().additionalStrength = 4f;
+                mainCamera.GetComponent<ScreenShake>().start = true;
+            }
+        }
     }
+    
 
     public void HitBall(){
-        if(ball == null){
+        hitParticle.Play();
+        if(ball == null ){
             ball = Instantiate(preFabBall, exit.position, exit.rotation);
-        }    
-        ball.GetComponent<Rigidbody>().velocity = exit.forward * 5000f * Time.deltaTime;
+        }
+        ball.GetComponent<Rigidbody>().velocity = exit.forward * 3500f * Time.deltaTime;
     }
+
+    public void Damage(){
+
+        if(!isDamaged){
+            PlayerManager.instance.life --;
+            mainCamera.GetComponent<ScreenShake>().additionalStrength = 1f;
+            mainCamera.GetComponent<ScreenShake>().start = true;
+            StartCoroutine(Blink());
+        }
+    }
+   public IEnumerator Blink()
+   {
+      isDamaged = true;
+      modelPlayer.enabled = false;
+      yield return new WaitForSeconds (0.12f);
+      modelPlayer.enabled = true;
+      yield return new WaitForSeconds (0.24f);
+      modelPlayer.enabled = false;
+      yield return new WaitForSeconds (0.36f);
+      modelPlayer.enabled = true;
+      yield return new WaitForSeconds (0.24f);
+      modelPlayer.enabled = false;
+      yield return new WaitForSeconds (0.36f);
+      modelPlayer.enabled = true;
+      isDamaged = false;
+   }
+
 }
