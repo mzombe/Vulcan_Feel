@@ -52,6 +52,32 @@ public class SwipeManager : MonoBehaviour
                 swipeDelta = (Vector2)Input.mousePosition - startTouch;
         }
 
+        if(Input.GetKeyDown(KeyCode.E)){
+            tap = true;
+        }else if(Input.GetKeyUp(KeyCode.E)){
+            tap = false;
+        }
+        if(Input.GetKeyDown(KeyCode.A)){
+            swipeLeft = true;
+        }else if(Input.GetKeyUp(KeyCode.A)){
+            swipeLeft = false;
+        }
+        if(Input.GetKeyDown(KeyCode.D)){
+            swipeRight = true;
+        }else if(Input.GetKeyUp(KeyCode.D)){
+            swipeRight = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Space)){
+            swipeUp = true;
+        }else if(Input.GetKeyUp(KeyCode.Space)){
+            swipeUp = false;
+        }
+        if(Input.GetKeyDown(KeyCode.S)){
+            swipeDown = true;
+        }else if(Input.GetKeyUp(KeyCode.S)){
+            swipeDown = false;
+        }
+
         //Did we cross the distance?
         if (swipeDelta.magnitude > 100)
         {
@@ -61,7 +87,7 @@ public class SwipeManager : MonoBehaviour
             if (Mathf.Abs(x) > Mathf.Abs(y))
             {
                 //Left or Right
-                if (x < 0)
+                if (x < 0 )
                     swipeLeft = true;
                 else
                     swipeRight = true;

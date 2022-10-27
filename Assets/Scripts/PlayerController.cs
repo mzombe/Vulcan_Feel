@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
-{
+{   
+    public Animator anime;
     public GameObject preFabBall;
     public Transform exit;
 
@@ -12,8 +13,8 @@ public class PlayerController : MonoBehaviour
     public float forwardSpeed;
     public float maxSpeed;
 
-    private int desiredLane = 1;//0:left, 1:middle, 2:right
-    public float laneDistance = 2.5f;//The distance between tow lanes
+    private int desiredLane = 1;
+    public float laneDistance = 2.5f;
 
     public bool isGrounded;
     public LayerMask groundLayer;
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
         if(prevState == isGrounded){
             prevState = true;
             if(isGrounded == true && prevState == true){
+                anime.SetBool("FreFall", false);
                 FindObjectOfType<AudioManager>().PlaySound("Land");
                 GameObject particle = Instantiate(slamParticle, new Vector3(transform.position.x,-1f,transform.position.z), slamParticle.transform.rotation);
                 Destroy(particle, 1f);
@@ -53,30 +55,31 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
-        //animator.SetBool("isGameStarted", true);
         move.z = forwardSpeed;
 
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.17f, groundLayer);
-        //animator.SetBool("isGrounded", isGrounded);
+
         if (isGrounded && velocity.y < 0)
             velocity.y = -1f;
 
         if (isGrounded)
         {
-
+            anime.SetBool("Grounded", true);
             if (SwipeManager.swipeUp){
+                anime.SetBool("Jump", true);
                 Jump();
             }
         }
         else
         {
+            anime.SetBool("Grounded", false);
+            anime.SetBool("Jump", false);
+            anime.SetBool("FreFall", true);
             velocity.y += gravity * Time.deltaTime;  
         }
 
         controller.Move(velocity * Time.deltaTime);
 
-        //Gather the inputs on which lane we should be
         if (SwipeManager.swipeRight)
         {
             desiredLane++;
@@ -90,14 +93,12 @@ public class PlayerController : MonoBehaviour
                 desiredLane = 0;
         }
 
-        //Calculate where we should be in the future
         Vector3 targetPosition = transform.position.z * transform.forward + transform.position.y * transform.up;
         if (desiredLane == 0)
             targetPosition += Vector3.left * laneDistance;
         else if (desiredLane == 2)
             targetPosition += Vector3.right * laneDistance;
 
-        //transform.position = targetPosition;
         if (transform.position != targetPosition)
         {
             Vector3 diff = targetPosition - transform.position;
@@ -114,7 +115,6 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {   
         FindObjectOfType<AudioManager>().PlaySound("Jump");
-        //animator.SetTrigger("jump");
         controller.center = Vector3.zero;
         controller.height = 2;
    

@@ -9,10 +9,13 @@ public class PlayerManager : MonoBehaviour
 {
     public GameObject screenPause, screenGameOver;
     public Text score;
+    public Text highScore;
 
     public static PlayerManager instance;
 
     public float scoreFloat;
+    public float highScoreFloat;
+    public Animator animHighScore;
     public GameObject addScore;
     public int life;
     public Image[] imgLife;
@@ -21,6 +24,7 @@ public class PlayerManager : MonoBehaviour
     {
         instance = this;
         ResumeGame();
+        highScore.text = PlayerPrefs.GetFloat("HighScore", 0).ToString("N0");
     }
 
     public void ScoreAddPlus(float add){
@@ -56,6 +60,11 @@ public class PlayerManager : MonoBehaviour
         if(Time.timeScale > 0 && scoreFloat < 9999f){
             scoreFloat += 0.1f;
             score.text = scoreFloat.ToString("N0");
+            if(scoreFloat > PlayerPrefs.GetFloat("HighScore",0)){
+                animHighScore.SetBool("Active", true);
+                PlayerPrefs.SetFloat("HighScore", scoreFloat);
+                highScore.text = scoreFloat.ToString("N0");
+            }
         }
 
         if(life <=0 ){
