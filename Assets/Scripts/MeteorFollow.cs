@@ -26,6 +26,7 @@ public class MeteorFollow : MonoBehaviour
         private CharacterController _targetController;
 
         private GameObject Player;
+        private float i = 0;
 
         private void Start() {
             Player = GameObject.FindGameObjectWithTag("Player");
@@ -36,10 +37,14 @@ public class MeteorFollow : MonoBehaviour
 
         private void FixedUpdate() {
 
+            //FindObjectOfType<AudioManager>().PlaySound("Meteor");
+            //FindObjectOfType<AudioManager>().VolumeAdd("Meteor");
+
             if(Player != null) {
                 float distance = transform.position.z - Player.transform.position.z;
 
                 if(distance < -5f){
+                    FindObjectOfType<AudioManager>().StopSound("Meteor");
                     Destroy(this.gameObject);
                 }
             }
@@ -98,6 +103,7 @@ public class MeteorFollow : MonoBehaviour
     private IEnumerator Destroy(float i)
     {
         yield return new WaitForSeconds(i);
+        FindObjectOfType<AudioManager>().StopSound("Meteor");
         Destroy(this.gameObject);
     }
 

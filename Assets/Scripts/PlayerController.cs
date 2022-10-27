@@ -40,30 +40,13 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    private void FixedUpdate()
-    {
-
-        //Increase Speed
-        // if (toggle)
-        // {
-        //     toggle = false;
-        //     if (forwardSpeed < maxSpeed)
-        //         forwardSpeed += 0.1f * Time.fixedDeltaTime;
-        // }
-        // else
-        // {
-        //     toggle = true;
-        //     if (Time.timeScale < 2f)
-        //         Time.timeScale += 0.005f * Time.fixedDeltaTime;
-        // }
-    }
-
     void Update()
     {       
 
         if(prevState == isGrounded){
             prevState = true;
             if(isGrounded == true && prevState == true){
+                FindObjectOfType<AudioManager>().PlaySound("Land");
                 GameObject particle = Instantiate(slamParticle, new Vector3(transform.position.x,-1f,transform.position.z), slamParticle.transform.rotation);
                 Destroy(particle, 1f);
                 prevState = false;
@@ -130,6 +113,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {   
+        FindObjectOfType<AudioManager>().PlaySound("Jump");
         //animator.SetTrigger("jump");
         controller.center = Vector3.zero;
         controller.height = 2;
@@ -139,8 +123,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //     FindObjectOfType<AudioManager>().PlaySound("GameOver");
-
         if (hit.gameObject.tag == "Wall" )
         {
             Damage();
@@ -164,6 +146,7 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.tag == "Meteor")
         {   
+            FindObjectOfType<AudioManager>().StopSound("Meteor");
             if(SwipeManager.tap && !isDamaged ){
                 Destroy(collision.gameObject);
                 HitBall();
@@ -175,6 +158,7 @@ public class PlayerController : MonoBehaviour
     
 
     public void HitBall(){
+        FindObjectOfType<AudioManager>().PlaySound("HitBall");
         hitParticle.Play();
         if(ball == null ){
             ball = Instantiate(preFabBall, exit.position, exit.rotation);
@@ -185,6 +169,7 @@ public class PlayerController : MonoBehaviour
     public void Damage(){
 
         if(!isDamaged){
+            FindObjectOfType<AudioManager>().PlaySound("Damage");
             PlayerManager.instance.life --;
             mainCamera.GetComponent<ScreenShake>().additionalStrength = 1f;
             mainCamera.GetComponent<ScreenShake>().start = true;
