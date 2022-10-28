@@ -119,7 +119,7 @@ MonoBehaviour:
   _rotateSpeed: 360
   _maxDistancePredict: 100
   _minDistancePredict: 10
-  _maxTimePrediction: 1
+  _maxTimePrediction: 10
   _deviationAmount: 0
   _deviationSpeed: 0
 --- !u!54 &5432787815049205695

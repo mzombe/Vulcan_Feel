@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject screenPause, screenGameOver;
     public Text score;
     public Text highScore;
+    public Text textTimeScale;
 
     public static PlayerManager instance;
 
@@ -35,6 +36,11 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {   
+        if (Time.timeScale <= 2.5f) {
+            Time.timeScale += 0.0001f; 
+            textTimeScale.text = Time.timeScale.ToString("N2") + "X";
+        }
+
         switch (life){
             case 3:
                 imgLife[3].enabled = false;

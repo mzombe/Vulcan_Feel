@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem hitParticle;
     public ParticleSystem dashLeft;
     public ParticleSystem dashRight;
+    public ParticleSystem dashUP;
 
     void Start()
     {   
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
         if(prevState == isGrounded){
             prevState = true;
             if(isGrounded == true && prevState == true){
+        
                 anime.SetBool("FreFall", false);
                 anime.SetBool("Jump", false);
                 FindObjectOfType<AudioManager>().PlaySound("Land");
@@ -75,6 +77,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            
             anime.SetBool("Grounded", false);
             anime.SetBool("FreFall", true);
             velocity.y += gravity * Time.deltaTime;  
@@ -120,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {   
+        dashUP.Play();
         FindObjectOfType<AudioManager>().PlaySound("Jump");
         controller.center = Vector3.zero;
         controller.height = 2;
@@ -143,6 +147,7 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.tag == "Meteor" )
         {
+            FindObjectOfType<AudioManager>().PlaySound("Stun");
             Destroy(collision.gameObject);
             Damage();
         }
@@ -177,7 +182,7 @@ public class PlayerController : MonoBehaviour
         if(!isDamaged){
             FindObjectOfType<AudioManager>().PlaySound("Damage");
             PlayerManager.instance.life --;
-            mainCamera.GetComponent<ScreenShake>().additionalStrength = 1f;
+            mainCamera.GetComponent<ScreenShake>().additionalStrength = 2f;
             mainCamera.GetComponent<ScreenShake>().start = true;
             StartCoroutine(Blink());
         }

@@ -48,13 +48,4 @@ public class AudioManager : MonoBehaviour
                 s.source.Stop();
         }
     }
-
-    public void VolumeAdd(string name)
-    {
-        foreach (Sound s in sounds)
-        {
-            if (s.name == name)
-                if(s.source.volume<1f)s.source.volume =+ Time.deltaTime;
-        }
-    }
 }

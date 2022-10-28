@@ -111,5 +111,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyMesh: 0
-  CutCascades: 5
+  CutCascades: 6
   ExplodeForce: 2
