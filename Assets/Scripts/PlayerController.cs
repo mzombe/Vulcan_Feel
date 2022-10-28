@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            
+            anime.SetBool("Jump", false);
             anime.SetBool("Grounded", false);
             anime.SetBool("FreFall", true);
             velocity.y += gravity * Time.deltaTime;  

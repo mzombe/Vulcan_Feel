@@ -31,12 +31,21 @@ public class AudioManager : MonoBehaviour
         
     }
 
+    private void Update() {
+        if(Time.timeScale == 0){
+            for (int i = 0; i < sounds.Length; i++)
+            {
+                sounds[i].source.Stop();
+            }
+        }
+    }
+
     public void PlaySound(string name)
     {
         foreach (Sound s in sounds)
         {
             if (s.name == name)
-                s.source.Play();
+                if(Time.timeScale > 0)s.source.Play();
         }
     }
 

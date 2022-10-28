@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5207690407722275880}
   - component: {fileID: 5207690407722275892}
   - component: {fileID: 5432787815049205695}
+  - component: {fileID: 8917240344280871983}
   m_Layer: 12
   m_Name: Meteor
   m_TagString: Meteor
@@ -138,6 +139,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8917240344280871983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5207690407722275881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf0152c2212f8a841bc34dc03acedf36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio: {fileID: 7023377553752363319}
 --- !u!1 &8876883234670482070
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +196,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 1138c7d02ca5b7e459a8bec5a054ae6d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0

@@ -16,7 +16,7 @@ public class RandomSpawn : MonoBehaviour
         {
             GenerateWall(20f,100f);
         }
-        for (int i = 0; i < (RandomSpecificInt() - 2); i++)
+        for (int i = 0; i < RandomSpecificInt(); i++)
         {
             GenerateSaw(100f,300f);
         }
@@ -34,7 +34,7 @@ public class RandomSpawn : MonoBehaviour
 
     public float RandomSpecific(){    
      
-     float val = Random.Range(1,4);
+     int val = Random.Range(1,4);
      
      if(val == 1)
          {
@@ -54,7 +54,7 @@ public class RandomSpawn : MonoBehaviour
 
     public int RandomSpecificInt(){    
      
-     float val = Random.Range(1,6);
+     int val = Random.Range(1,5);
      
      if(val == 1)
          {
@@ -72,7 +72,7 @@ public class RandomSpawn : MonoBehaviour
         {
             return 5;
         }   
-    else if(val > 5)
+    else if(val == 5)
         {
             return 6;
         }   

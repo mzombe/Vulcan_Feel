@@ -53,7 +53,7 @@ public class SpawnPlatform : MonoBehaviour
             spawnRandom.GenerateWall(100f, 200f);
         }
 
-        for (int i = 0; i < (RandomSpecific()-2); i++)
+        for (int i = 0; i < RandomSpecific(); i++)
         {
             spawnRandom.GenerateSaw(200f, 300f);
         }
@@ -61,7 +61,7 @@ public class SpawnPlatform : MonoBehaviour
 
     public int RandomSpecific(){    
      
-     float val = Random.Range(1,4);
+     int val = Random.Range(1,6);
      
      if(val == 1)
          {
@@ -75,9 +75,17 @@ public class SpawnPlatform : MonoBehaviour
          {
              return 4;
          }
-    else if(val > 3)
+    else if(val == 4)
          {
              return 4;
+         }
+    else if(val == 5)
+         {
+             return 5;
+         }
+    else if(val == 6)
+         {
+             return 6;
          }
     return 1;
     

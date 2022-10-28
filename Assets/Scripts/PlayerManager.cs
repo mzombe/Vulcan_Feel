@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject screenPause, screenGameOver;
+    public GameObject screenPause, screenGameOver, screenTapToStart;
     public Text score;
     public Text highScore;
     public Text textTimeScale;
@@ -21,11 +23,13 @@ public class PlayerManager : MonoBehaviour
     public int life;
     public Image[] imgLife;
 
+
     public void Awake()
     {
-        instance = this;
         ResumeGame();
+        instance = this;
         highScore.text = PlayerPrefs.GetFloat("HighScore", 0).ToString("N0");
+        
     }
 
     public void ScoreAddPlus(float add){
@@ -37,7 +41,7 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {   
         if (Time.timeScale <= 2.5f) {
-            Time.timeScale += 0.0001f; 
+            if(Time.timeScale > 0)Time.timeScale += 0.0001f; 
             textTimeScale.text = Time.timeScale.ToString("N2") + "X";
         }
 
@@ -102,11 +106,6 @@ public class PlayerManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void LoadScene(string name){
-        Time.timeScale = 1;
-        SceneManager.LoadScene(name);
-    }
-
     public void ShowItens(GameObject obj){
         obj.SetActive(true);
     }
@@ -118,4 +117,5 @@ public class PlayerManager : MonoBehaviour
     public void OpenURL(string url){
         Application.OpenURL(url);
     }
+
 }
